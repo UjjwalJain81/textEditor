@@ -26,7 +26,8 @@ export default function TextForm(props) {
         var text = document.getElementById("myBox");
         text.select();
         navigator.clipboard.writeText(text.value);
-        props.showAlert("Your text is successfully copied to clipboard.", "success");
+        document.getSelection().removeAllRanges();
+        props.showAlert("Copied to clipboard!", "success");
     }
 
    const handleExtSpace = ()=>{
@@ -56,11 +57,11 @@ export default function TextForm(props) {
         <textarea className="form-control" value={text} onChange={(e)=>{
             setText(e.target.value);
         }} id="myBox" rows="8" 
-        style={{backgroundColor: props.mode === 'dark'?'grey':'white', color: props.mode === 'dark'?'white':'#043b53'}}></textarea>
+        style={{backgroundColor: props.mode === 'dark'?'#13466e':'white', color: props.mode === 'dark'?'white':'#043b53'}}></textarea>
         </div>
-        <button className="btn btn-primary mx-2" onClick={handleUpClick}>Covert text to Uppercase</button>
-        <button className="btn btn-primary mx-2" onClick={handleLoClick}>Covert text to Lowercase</button>
-        <button className="btn btn-primary mx-2" onClick={handleCleClick}>Clear text</button>
+        <button disabled={text.length===0} className="btn btn-primary mx-2 my-1" onClick={handleUpClick}>Covert text to Uppercase</button>
+        <button disabled={text.length===0} className="btn btn-primary mx-2 my-1" onClick={handleLoClick}>Covert text to Lowercase</button>
+        <button disabled={text.length===0} className="btn btn-primary mx-2 my-1" onClick={handleCleClick}>Clear text</button>
         <input 
             type="text" 
             value={findtext} onChange={(e)=>{setfindtext(e.target.value);}} 
@@ -71,15 +72,15 @@ export default function TextForm(props) {
             value={replacetext} onChange={(e)=>{setreplacetext(e.target.value);}} 
             placeholder="Replace"
             />
-        <button className="btn btn-primary mx-2" onClick={handleReplClick}>Replace</button>
-        <button className="btn btn-primary mx-2" onClick={handlecopylClick}>Copy text</button>
-        <button className="btn btn-primary mx-2" onClick={handleExtSpace}>Remove Space</button>
+        <button disabled={text.length===0} className="btn btn-primary mx-2 my-1" onClick={handleReplClick}>Replace</button>
+        <button disabled={text.length===0} className="btn btn-primary mx-2 my-1" onClick={handlecopylClick}>Copy text</button>
+        <button disabled={text.length===0} className="btn btn-primary mx-2 my-1" onClick={handleExtSpace}>Remove Space</button>
 
     </div>
     <div className="container my-2" style={{color: props.mode === 'dark'?'white':'#043b53'}}>
         <h2>Your text summary</h2>
-        <p>{text.length} characters, {text.split(" ").length} words and {text.split(". ").length} Sentences</p>
-        <p>{0.008 * text.split(" ").length} minutes to read</p>
+        <p>{text.length} characters, {text.split(" ").filter((element) => {return element.length!=0}).length} words and {text.split(". ").filter((element) => {return element.length!=0}).length} Sentences</p>
+        <p>{0.008 * text.split(" ").filter((element) => {return element.length!=0}).length} minutes to read</p>
         <h2>Preview</h2>
         <p>{text.length>0 ? text : "Enter something in the textbox above to preview it here"}</p>
     </div>
